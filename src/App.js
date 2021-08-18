@@ -1,4 +1,4 @@
-import "./App.css";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import Pagination from "./component/Pagination";
 import Table from "./component/table";

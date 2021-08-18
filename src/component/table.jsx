@@ -12,13 +12,18 @@ class Table extends Component {
     const index = Movies.indexOf(obj);
     Movies[index].like = !Movies[index].like;
     this.setState({
-      Movies: Movies,
+      Movies
     });
   };
-
+  handalDelete = (obj) => {
+    const Movies = this.state.Movies.filter((obj1) => obj !== obj1);
+    this.setState({
+      Movies,
+    });
+  };
   render() {
     const { Movies } = this.state;
-
+    if (Movies.length === 0) return <p>No Movie left</p>;
     return (
       <table className="table table-striped">
         <thead>
@@ -36,7 +41,9 @@ class Table extends Component {
               <Row
                 obj={obj}
                 key={obj._id}
+                name={obj.genre.name}
                 onClick={() => this.handalLike(obj)}
+                onDelete={() => this.handalDelete(obj)}
               />
             );
           })}
