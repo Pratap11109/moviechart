@@ -1,29 +1,27 @@
-import React, { Component } from "react";
+import React from "react";
+import _ from "lodash";
 
-class Pagination extends Component {
-  render() {
-    return (
-      <nav aria-label="...">
-        <ul className="pagination">
-          <li className="page-item">
-            <a className="page-link" href="#">
-              1
-            </a>
-          </li>
-          <li className="page-item active">
-            <a className="page-link" href="#">
-              2
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              3
-            </a>
-          </li>
-        </ul>
-      </nav>
-    );
-  }
-}
+const Pagination = (props) => {
+  const { totalMovies, pageSize, onClick,currentPage } = props;
+  const size = Math.ceil(totalMovies / pageSize);
+
+  const pages = _.range(1, size + 1);
+  console.log(pages);
+  return (
+    <nav aria-label="...">
+      <ul className="pagination">
+        {pages.map((page) => {
+          return (
+            <li key={page} className={page===currentPage?"page-item active":"page-item"}>
+              <a className="page-link" href="#" onClick={() => onClick(page)}>
+                {page}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+};
 
 export default Pagination;
