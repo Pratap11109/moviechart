@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
 import { pagination } from "../exOperation/pagination";
 import Pagination from "./Pagination";
+import ListGroup from "./ListGroup";
 import Row from "./Row";
 
 class Table extends Component {
@@ -9,6 +11,8 @@ class Table extends Component {
     Movies: getMovies(),
     pageSize: 4,
     currentPage: 1,
+    genres: getGenres(),
+    currentGener: null,
   };
   handalLike = (obj) => {
     const Movies = [...this.state.Movies];
@@ -62,55 +66,68 @@ class Table extends Component {
       () => console.log(this.state.currentPage)
     );
   };
+  handalGenres = (obj) => {
+    this.setState({
+      currentGener: obj,
+    });
+  };
 
   render() {
-    const { Movies, currentPage, pageSize } = this.state;
-    const count = Movies.length;
-    // console.log("moviese lingth  ", count);
-    const movies = [...Movies];
-    if (count === 0) return <p>No Movie left</p>;
-    console.log("inside render ", currentPage);
-    const filterMovies = pagination(movies, currentPage, pageSize);
-    // console.log("moviese lingth  ", count);
+    const { Movies, currentPage, pageSize, genres, currentGener } = this.state;
+    const movies = Movies.filter((obj) => {
+      return currentGener === obj.genre.name || currentGener === null;
+    });
 
+    const movieCopy = [...movies];
+    const count = movies.length;
+    if (count === 0) return <p>No Movie left</p>;
+    const filterMovies = pagination(movieCopy, currentPage, pageSize);
     return (
-      <div className="container">
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th onClick={this.sortByTitle} style={{ cursor: "pointer" }}>
-                Title
-              </th>
-              <th onClick={this.sortByRating} style={{ cursor: "pointer" }}>
-                Rating
-              </th>
-              <th onClick={this.sortByGenre} style={{ cursor: "pointer" }}>
-                Gener
-              </th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filterMovies.map((obj) => {
-              return (
-                <Row
-                  obj={obj}
-                  key={obj._id}
-                  name={obj.genre.name}
-                  onClick={() => this.handalLike(obj)}
-                  onDelete={() => this.handalDelete(obj)}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-        <Pagination
-          totalMovies={count}
-          pageSize={pageSize}
-          onClick={this.handalPage}
-          currentPage={currentPage}
+      <div className="row my-4">
+        <ListGroup
+          genres={genres}
+          currentGener={currentGener}
+          onClick={this.handalGenres}
         />
+        <div className="col">
+          <p>Showing {count} movies in the Database </p>
+          <table className="table table-striped ">
+            <thead>
+              <tr>
+                <th onClick={this.sortByTitle} style={{ cursor: "pointer" }}>
+                  Title
+                </th>
+                <th onClick={this.sortByRating} style={{ cursor: "pointer" }}>
+                  Rating
+                </th>
+                <th onClick={this.sortByGenre} style={{ cursor: "pointer" }}>
+                  Gener
+                </th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filterMovies.map((obj) => {
+                return (
+                  <Row
+                    obj={obj}
+                    key={obj._id}
+                    name={obj.genre.name}
+                    onClick={() => this.handalLike(obj)}
+                    onDelete={() => this.handalDelete(obj)}
+                  />
+                );
+              })}
+            </tbody>
+          </table>
+          <Pagination
+            totalMovies={count}
+            pageSize={pageSize}
+            onClick={this.handalPage}
+            currentPage={currentPage}
+          />
+        </div>
       </div>
     );
   }
