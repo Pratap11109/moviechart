@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
-import Row from "./Row";
+import { pagination } from "../exOperation/pagination";
 import Pagination from "./Pagination";
+import Row from "./Row";
 
 class Table extends Component {
   state = {
@@ -9,7 +10,6 @@ class Table extends Component {
     pageSize: 4,
     currentPage: 1,
   };
-
   handalLike = (obj) => {
     const Movies = [...this.state.Movies];
     const index = Movies.indexOf(obj);
@@ -55,14 +55,24 @@ class Table extends Component {
     });
   };
   handalPage = (page) => {
-    this.setState({
-      currentPage: page,
-    });
+    this.setState(
+      {
+        currentPage: page,
+      },
+      () => console.log(this.state.currentPage)
+    );
   };
 
   render() {
     const { Movies, currentPage, pageSize } = this.state;
-    if (Movies.length === 0) return <p>No Movie left</p>;
+    const count = Movies.length;
+    // console.log("moviese lingth  ", count);
+    const movies = [...Movies];
+    if (count === 0) return <p>No Movie left</p>;
+    console.log("inside render ", currentPage);
+    const filterMovies = pagination(movies, currentPage, pageSize);
+    // console.log("moviese lingth  ", count);
+
     return (
       <div className="container">
         <table className="table table-striped">
@@ -82,7 +92,7 @@ class Table extends Component {
             </tr>
           </thead>
           <tbody>
-            {Movies.map((obj) => {
+            {filterMovies.map((obj) => {
               return (
                 <Row
                   obj={obj}
@@ -96,7 +106,7 @@ class Table extends Component {
           </tbody>
         </table>
         <Pagination
-          totalMovies={Movies.length}
+          totalMovies={count}
           pageSize={pageSize}
           onClick={this.handalPage}
           currentPage={currentPage}

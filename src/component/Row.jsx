@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-// import "font-awesome/css/font-awesome.css";
 
 const row = (props) => {
-  const { obj, onClick ,onDelete,name} = props;
+  const { obj, onClick, onDelete, name } = props;
   let like = obj.like ? "fa fa-heart" : "fa fa-heart-o";
   return (
     <tr>
@@ -18,7 +17,9 @@ const row = (props) => {
         ></i>
       </td>
       <td>
-        <button className="btn btn-danger btn-sm" onClick={onDelete}>Delete</button>
+        <button className="btn btn-danger btn-sm" onClick={onDelete}>
+          Delete
+        </button>
       </td>
     </tr>
   );
