@@ -8,12 +8,19 @@ import Row from "./Row";
 
 class Table extends Component {
   state = {
-    Movies: getMovies(),
+    Movies: [],
     pageSize: 4,
     currentPage: 1,
-    genres: getGenres(),
+    genres: [],
     currentGener: null,
   };
+
+  componentDidMount() {
+    this.setState({
+      Movies: getMovies(),
+      genres: getGenres(),
+    });
+  }
   handalLike = (obj) => {
     const Movies = [...this.state.Movies];
     const index = Movies.indexOf(obj);
@@ -80,7 +87,7 @@ class Table extends Component {
 
     const movieCopy = [...movies];
     const count = movies.length;
-    if (count === 0) return <p>No Movie left</p>;
+
     const filterMovies = pagination(movieCopy, currentPage, pageSize);
     return (
       <div className="row my-4">
@@ -90,7 +97,7 @@ class Table extends Component {
           onClick={this.handalGenres}
         />
         <div className="col">
-          <p>Showing {count} movies in the Database </p>
+          <p style={{marginLeft:30,fontSize: 30}} >Showing {count} movies in the Database </p>
           <table className="table table-striped ">
             <thead>
               <tr>
