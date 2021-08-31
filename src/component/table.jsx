@@ -97,7 +97,9 @@ class Table extends Component {
           onClick={this.handalGenres}
         />
         <div className="col">
-          <p style={{marginLeft:30,fontSize: 30}} >Showing {count} movies in the Database </p>
+          <p style={{ marginLeft: 30, fontSize: 30 }}>
+            Showing {count} movies in the Database{" "}
+          </p>
           <table className="table table-striped ">
             <thead>
               <tr>
